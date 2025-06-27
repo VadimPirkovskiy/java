@@ -1,0 +1,38 @@
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
+public class WeightSorting {
+
+    public static String sortWeights(String weights) {
+        if (weights == null || weights.isEmpty()) {
+            return ""; // Handle empty input
+        }
+
+        // Split the string into an array of weights
+        String[] weightArray = weights.split(" ");
+
+        // Sort the weights based on the sum of their digits in descending order
+        Arrays.sort(weightArray, Comparator.comparingInt(WeightSorting::digitSum).reversed());
+
+        // Join the sorted array back into a string
+        return Arrays.stream(weightArray).collect(Collectors.joining(" "));
+    }
+
+    // Helper function to calculate the sum of digits of a number
+    private static int digitSum(String number) {
+        int sum = 0;
+        for (char c : number.toCharArray()) {
+            if (Character.isDigit(c)) {
+                sum += Character.getNumericValue(c);
+            }
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) {
+        String weights = "56 65 74 100 99 68 86 180 90";
+        String sortedWeights = sortWeights(weights);
+        System.out.println("Отсортированный список: " + sortedWeights); // Output: 100 180 90 56 65 74 68 86 99
+    }
+}
