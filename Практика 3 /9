@@ -1,0 +1,122 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+public class CaesarCipherDecoder {
+
+    private static final String TEXT_URL = "https://fish-text.ru/get?type=sentence&number=10000";
+
+    public static String decryptCaesarCipher(String encryptedText) throws IOException {
+        // 1. Download the text for frequency analysis
+        String dictionaryText = downloadText(TEXT_URL);
+
+        // 2. Calculate letter frequencies in the dictionary text
+        Map<Character, Double> dictionaryFrequencies = calculateLetterFrequencies(dictionaryText);
+
+        // 3. Calculate letter frequencies in the encrypted text
+        Map<Character, Double> encryptedFrequencies = calculateLetterFrequencies(encryptedText);
+
+        // 4. Determine the best shift value based on frequency analysis
+        int bestShift = determineBestShift(dictionaryFrequencies, encryptedFrequencies);
+
+        // 5. Decrypt the text using the best shift
+        return caesarCipher(encryptedText, -bestShift); // Negative shift for decryption
+    }
+
+    // Helper method to download text from a URL
+    private static String downloadText(String urlStr) throws IOException {
+        StringBuilder text = new StringBuilder();
+        URL url = new URL(urlStr);
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                text.append(line);
+            }
+        }
+        return text.toString();
+    }
+
+    // Helper method to calculate letter frequencies
+    private static Map<Character, Double> calculateLetterFrequencies(String text) {
+        Map<Character, Double> frequencies = new HashMap<>();
+        int letterCount = 0;
+
+        text = text.toLowerCase(); // Case-insensitive analysis
+        for (char c : text.toCharArray()) {
+            if (Character.isLetter(c)) {
+                frequencies.put(c, frequencies.getOrDefault(c, 0.0) + 1.0);
+                letterCount++;
+            }
+        }
+
+        // Normalize frequencies
+        for (Character c : frequencies.keySet()) {
+            frequencies.put(c, frequencies.get(c) / letterCount);
+        }
+
+        return frequencies;
+    }
+
+    // Helper method to determine the best shift value
+Java
+
+
+    private static int determineBestShift(Map<Character, Double> dictionaryFrequencies, Map<Character, Double> encryptedFrequencies) {
+        int bestShift = 0;
+        double minDistance = Double.MAX_VALUE;
+
+        for (int shift = 0; shift < 26; shift++) {
+            double distance = calculateFrequencyDistance(dictionaryFrequencies, encryptedFrequencies, shift);
+            if (distance < minDistance) {
+                minDistance = distance;
+                bestShift = shift;
+            }
+        }
+
+        return bestShift;
+    }
+
+    // Helper method to calculate the distance between frequency distributions
+    private static double calculateFrequencyDistance(Map<Character, Double> dictionaryFrequencies, Map<Character, Double> encryptedFrequencies, int shift) {
+        double distance = 0;
+        for (char c = 'a'; c <= 'z'; c++) {
+            char shiftedChar = (char) ('a' + (c - 'a' + shift) % 26);
+            double dictionaryFreq = dictionaryFrequencies.getOrDefault(c, 0.0);
+            double encryptedFreq = encryptedFrequencies.getOrDefault(shiftedChar, 0.0);
+            distance += Math.pow(dictionaryFreq - encryptedFreq, 2);
+        }
+        return distance;
+    }
+
+    // Helper method for Caesar cipher
+    private static String caesarCipher(String text, int shift) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < text.length(); i++) {
+            char currentChar = text.charAt(i);
+
+            if (Character.isLetter(currentChar)) {
+                char base = Character.isUpperCase(currentChar) ? 'A' : 'a';
+                int newChar = (currentChar - base + shift) % 26;
+
+                if (newChar < 0) {
+                    newChar += 26; // Handle negative shifts
+                }
+
+                result.append((char) (base + newChar));
+            } else {
+                result.append(currentChar); // Non-letters remain unchanged
+            }
+        }
+        return result.toString();
+    }
+
+    public static void main(String[] args) throws IOException {
+        String encryptedText = "Lipps Asvph!";
+        String decryptedText = decryptCaesarCipher(encryptedText);
+        System.out.println("Зашифрованный текст: " + encryptedText);
+        System.out.println("Расшифрованный текст: " + decryptedText);
+    }
+}
