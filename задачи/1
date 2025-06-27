@@ -1,0 +1,12 @@
+public class SuffixCheck {
+
+    public static boolean isSuffix(String str1, String str2) {
+        return str1.endsWith(str2);
+    }
+
+    public static void main(String[] args) {
+        // Example Usage:
+        System.out.println("isSuffix(\"abc\", \"bc\"): " + isSuffix("abc", "bc"));   // Output: true
+        System.out.println("isSuffix(\"abc\", \"abd\"): " + isSuffix("abc", "abd"));  // Output: false
+    }
+}
