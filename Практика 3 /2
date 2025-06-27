@@ -1,0 +1,36 @@
+public class Square {
+
+    public static boolean isSquare(int n) {
+        if (n <= 0 || n >= 100000) {
+            return false; 
+        }
+
+        for (int i = 1; i <= n / 2 + 1; i++) {
+            if (n % i == 0) {
+                int jPlusI = n / i;
+                int jMinusI = i;
+
+                if ((jPlusI + jMinusI) % 2 == 0) {
+                    int j = (jPlusI + jMinusI) / 2;
+                    int i_val = jPlusI - j; //i = jPlusI - j
+                    if(i_val > 0) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        int n1 = 9;
+        int n2 = 5;
+        int n3 = 7;
+        int n4 = 10;
+
+        System.out.println(n1 + ": " + isSquareDifference(n1));
+        System.out.println(n2 + ": " + isSquareDifference(n2));
+        System.out.println(n3 + ": " + isSquareDifference(n3));
+        System.out.println(n4 + ": " + isSquareDifference(n4));
+    }
+}
