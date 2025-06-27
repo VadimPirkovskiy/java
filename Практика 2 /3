@@ -1,0 +1,8 @@
+def find_centroid(triangle):
+    x_sum = sum(point[0] for point in triangle) / 3
+    y_sum = sum(point[1] for point in triangle) / 3
+    return [round(x_sum, 4), round(y_sum, 4)]
+
+triangle = eval(input())
+centroid = find_centroid(triangle)
+print(centroid)
