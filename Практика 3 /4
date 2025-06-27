@@ -1,0 +1,60 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class TripPlanner {
+
+    public static List<Integer> chooseBestSum(int maxDistance, int numCities, List<Integer> distances) {
+        List<Integer> bestCombination = null;
+        int bestSum = 0;
+
+        // Generate all possible combinations of cities
+        List<List<Integer>> combinations = generateCombinations(distances, numCities);
+
+        // Iterate through each combination and find the best one
+        for (List<Integer> combination : combinations) {
+            int currentSum = combination.stream().mapToInt(Integer::intValue).sum();
+
+            if (currentSum <= maxDistance && currentSum > bestSum) {
+                bestSum = currentSum;
+                bestCombination = combination;
+            }
+        }
+
+        return bestCombination;
+    }
+
+    // Helper method to generate combinations of cities
+    private static List<List<Integer>> generateCombinations(List<Integer> distances, int numCities) {
+        List<List<Integer>> combinations = new ArrayList<>();
+        generateCombinationsHelper(distances, numCities, 0, new ArrayList<>(), combinations);
+        return combinations;
+    }
+
+    private static void generateCombinationsHelper(List<Integer> distances, int numCities, int start, List<Integer> currentCombination, List<List<Integer>> combinations) {
+        if (currentCombination.size() == numCities) {
+            combinations.add(new ArrayList<>(currentCombination));
+            return;
+        }
+
+        for (int i = start; i < distances.size(); i++) {
+            currentCombination.add(distances.get(i));
+            generateCombinationsHelper(distances, numCities, i + 1, currentCombination, combinations);
+            currentCombination.remove(currentCombination.size() - 1); // Backtrack
+        }
+    }
+
+    public static void main(String[] args) {
+        List<Integer> distances = List.of(50, 55, 57, 58, 60);
+        int maxDistance = 175;
+        int numCities = 3;
+
+        List<Integer> bestCities = chooseBestSum(maxDistance, numCities, distances);
+
+        if (bestCities != null) {
+            System.out.println("Лучший выбор городов: " + bestCities);
+            System.out.println("Суммарное расстояние: " + bestCities.stream().mapToInt(Integer::intValue).sum());
+        } else {
+            System.out.println("Невозможно выбрать города так, чтобы суммарное расстояние не превышало " + maxDistance);
+        }
+    }
+}
