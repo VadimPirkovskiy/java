@@ -1,0 +1,39 @@
+import java.util.*;
+
+public class SequenceGenerator {
+
+    public static List<Integer> generateSequence(int n) {
+        TreeSet<Integer> resultSet = new TreeSet<>();
+        Queue<Integer> queue = new LinkedList<>();
+
+        queue.offer(1);
+        resultSet.add(1);
+
+        while (resultSet.size() < n) {
+            int current = queue.poll();
+
+            int y = 2 * current + 1;
+            int z = 3 * current + 1;
+
+            if (!resultSet.contains(y)) {
+                resultSet.add(y);
+                queue.offer(y);
+            }
+
+            if (!resultSet.contains(z)) {
+                resultSet.add(z);
+                queue.offer(z);
+            }
+        }
+
+        return new ArrayList<>(resultSet);
+    }
+
+    public static void main(String[] args) {
+        int count = 20; // Количество чисел в последовательности
+
+        List<Integer> sequence = generateSequence(count);
+
+        System.out.println("Generated sequence:");
+        System.out.println(sequence);
+    }
