@@ -1,0 +1,48 @@
+public class Main {
+
+    public static long calculateTurns(long n) {
+        long turns = 0;
+        boolean taniaTurn = true;
+
+        while (n > 0) {
+            turns++;
+
+            if (taniaTurn) {
+                if (n % 2 == 0) {
+                    if (n / 2 > 0) {
+                        n /= 2;
+                    } else {
+                        n -= 1;
+                    }
+                } else {
+                    n -= 1;
+                }
+            } else {
+                if (n % 2 == 0) {
+                    if (n / 2 > 0) {
+                        n /= 2;
+                    } else {
+                        n -= 1;
+                    }
+                } else {
+                    n -= 1;
+                }
+            }
+            taniaTurn = !taniaTurn;
+        }
+
+        return turns;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("1: " + calculateTurns(1));
+        System.out.println("2: " + calculateTurns(2));
+        System.out.println("3: " + calculateTurns(3));    
+        System.out.println("4: " + calculateTurns(4));
+        System.out.println("5: " + calculateTurns(5));
+        System.out.println("6: " + calculateTurns(6));
+        System.out.println("7: " + calculateTurns(7));
+        System.out.println("10: " + calculateTurns(10));
+        System.out.println("100: " + calculateTurns(100));
+    }
+}
