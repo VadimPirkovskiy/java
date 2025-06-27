@@ -1,0 +1,28 @@
+import java.util.*;
+
+public class RemoveDuplicateWords {
+
+    public static String removeDuplicateWords(String text) {
+        // Split the string into words
+        String[] words = text.split(" ");
+
+        // Use a LinkedHashSet to store unique words while preserving order
+        Set<String> uniqueWords = new LinkedHashSet<>();
+
+        // Add words to the set (duplicates are automatically ignored)
+        for (String word : words) {
+            uniqueWords.add(word);
+        }
+
+        // Join the unique words back into a string
+        return String.join(" ", uniqueWords);
+    }
+
+    public static void main(String[] args) {
+        // Example Usage:
+        String inputString = "abc abc ab abc ab acs acs";
+        String result = removeDuplicateWords(inputString);
+        System.out.println("Original string: " + inputString);
+        System.out.println("String with duplicates removed: " + result);
+    }
+}
