@@ -1,0 +1,36 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class EveryThird {
+
+    public static List<Integer> everyThird(int numPlayers, int startPlayer) {
+        if (numPlayers <= 0 || startPlayer <= 0 || startPlayer > numPlayers) {
+            throw new IllegalArgumentException("Invalid input parameters.");
+        }
+
+        List<Integer> players = new ArrayList<>();
+        for (int i = 1; i <= numPlayers; i++) {
+            players.add(i);
+        }
+
+        List<Integer> eliminated = new ArrayList<>();
+        int currentIndex = startPlayer - 1; // Adjust startPlayer to be 0-indexed
+
+        while (players.size() > 1) {
+            currentIndex = (currentIndex + 2) % players.size(); // Move to the third player (0-indexed)
+            eliminated.add(players.remove(currentIndex)); // Remove the third player and add to eliminated list
+        }
+
+        eliminated.add(players.get(0)); // Add the winner to the eliminated list (the last remaining player)
+        return eliminated;
+    }
+
+    public static void main(String[] args) {
+        int numPlayers = 7;
+        int startPlayer = 1;
+
+        List<Integer> eliminated = everyThird(numPlayers, startPlayer);
+
+        System.out.println("Выбывшие игроки: " + eliminated); // Output: [3, 6, 2, 7, 5, 1, 4]
+    }
+}
