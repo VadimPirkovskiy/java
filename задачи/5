@@ -1,0 +1,15 @@
+public class ArithmeticSequence {
+
+    public static void printArithmeticSequence(int start, int step, int count) {
+        // Generate and print the arithmetic sequence
+        for (int i = 0; i < count; i++) {
+            System.out.print(start + i * step + (i == count - 1 ? "" : ","));
+        }
+        System.out.println(); // Add a newline at the end
+    }
+
+    public static void main(String[] args) {
+        // Example Usage:
+        printArithmeticSequence(1, 2, 5); // Call the function with your input values
+    }
+}
