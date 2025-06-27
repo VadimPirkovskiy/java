@@ -1,0 +1,39 @@
+public class FuscFunction {
+
+    public static int fuscRecursive(int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        if (n % 2 == 0) {
+            return fuscRecursive(n / 2);
+        } else {
+            int k = n / 2;
+            return fuscRecursive(k) + fuscRecursive(k + 1);
+        }
+    }
+
+    public static int fuscIterative(int n) {
+        if (n == 0) return 0;
+        int a = 0; // fusc(0)
+        int b = 1; // fusc(1)
+
+        String binary = Integer.toBinaryString(n);
+        for (int i = 1; i < binary.length(); i++) {
+            char bit = binary.charAt(i);
+            if (bit == '0') {
+                // fusc(2n) = fusc(n)
+                b = a + b;
+            } else {
+                // fusc(2n + 1) = fusc(n) + fusc(n + 1)
+                a = a + b;
+            }
+        }
+        return a;
+    }
+
+    public static void main(String[] args) {
+        for (int i = 0; i <= 20; i++) {
+            System.out.printf("fusc(%d) = %d (recursive), %d (iterative)%n",
+                    i, fuscRecursive(i), fuscIterative(i));
+        }
+    }
+}
