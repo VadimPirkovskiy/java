@@ -1,0 +1,124 @@
+import java.io.*;
+import java.util.*;
+import java.util.regex.*;
+
+public class Calculator {
+    private static final String HISTORY_FILE = "history.txt";
+
+    public static void main(String[] args) throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        List<String> history = loadHistory();
+
+        System.out.println("=== Калькулятор с историей ===");
+        System.out.println("Введите выражение или 'history' / 'exit':");
+
+        while (true) {
+            System.out.print("> ");
+            String input = scanner.nextLine().trim();
+
+            if (input.equalsIgnoreCase("exit")) break;
+
+            if (input.equalsIgnoreCase("history")) {
+                System.out.println("--- История ---");
+                history.forEach(System.out::println);
+                continue;
+            }
+
+            try {
+                String preprocessed = preprocess(input);
+                double result = evaluate(preprocessed);
+                String record = input + " = " + result;
+                history.add(record);
+                System.out.println(record);
+                saveHistory(history);
+            } catch (Exception e) {
+                System.out.println("Ошибка: " + e.getMessage());
+            }
+        }
+    }
+    private static String preprocess(String expr) {
+        expr = expr.replaceAll("\\|(-?[\\d+*/%^(). ]+?)\\|", "abs($1)");
+        return expr.replaceAll("//", "floordiv");
+    }
+
+    private static void saveHistory(List<String> history) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(HISTORY_FILE))) {
+            for (String line : history) {
+                writer.write(line);
+                writer.newLine();
+            }
+        }
+    }
+    private static List<String> loadHistory() throws IOException {
+        List<String> history = new ArrayList<>();
+        File file = new File(HISTORY_FILE);
+        if (file.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null)
+                    history.add(line);
+            }
+        }
+        return history;
+    }
+
+    private static double evaluate(String expression) {
+        expression = expression.replaceAll(" ", "");
+        return parse(expression);
+    }
+
+    private static double parse(String expr) {
+        if (expr.startsWith("abs(")) {
+            int end = findClosingParen(expr, 4);
+            double val = parse(expr.substring(4, end));
+            return Math.abs(val);
+        }
+
+        int idx;
+
+        String[] ops = {"+", "-", "*", "/", "floordiv", "%", "^"};
+        for (String op : ops) {
+            idx = findOperator(expr, op);
+            if (idx != -1) {
+                double left = parse(expr.substring(0, idx));
+                double right = parse(expr.substring(idx + op.length()));
+                return applyOperator(left, right, op);
+            }
+        }
+
+        return Double.parseDouble(expr);
+    }
+    private static int findOperator(String expr, String op) {
+        int level = 0;
+        for (int i = 0; i <= expr.length() - op.length(); i++) {
+            if (expr.charAt(i) == '(') level++;
+            if (expr.charAt(i) == ')') level--;
+            if (level == 0 && expr.startsWith(op, i))
+                return i;
+        }
+        return -1;
+    }
+
+    private static int findClosingParen(String expr, int start) {
+        int level = 1;
+        for (int i = start + 1; i < expr.length(); i++) {
+            if (expr.charAt(i) == '(') level++;
+            if (expr.charAt(i) == ')') level--;
+            if (level == 0) return i;
+        }
+        throw new RuntimeException("Скобки не закрыты.");
+    }
+
+    private static double applyOperator(double a, double b, String op) {
+        return switch (op) {
+            case "+" -> a + b;
+            case "-" -> a - b;
+            case "*" -> a * b;
+            case "/" -> a / b;
+            case "floordiv" -> (int) (a / b);
+            case "%" -> a % b;
+            case "^" -> Math.pow(a, b);
+            default -> throw new RuntimeException("Неизвестный оператор: " + op);
+        };
+    }
+}
