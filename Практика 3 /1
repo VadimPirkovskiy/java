@@ -1,0 +1,39 @@
+public class CaesarCipher {
+
+    public static String caesarCipher(String text, int shift, boolean encrypt) {
+        StringBuilder result = new StringBuilder();
+        if (!encrypt) {
+            shift = -shift; // Decrypting means shifting in the opposite direction
+        }
+
+        for (int i = 0; i < text.length(); i++) {
+            char currentChar = text.charAt(i);
+
+            if (Character.isLetter(currentChar)) {
+                char base = Character.isUpperCase(currentChar) ? 'A' : 'a';
+                int newChar = (currentChar - base + shift) % 26;
+
+                if (newChar < 0) {
+                    newChar += 26; // Handle negative shifts
+                }
+
+                result.append((char) (base + newChar));
+            } else {
+                result.append(currentChar); // Non-letters remain unchanged
+            }
+        }
+        return result.toString();
+    }
+
+    public static void main(String[] args) {
+        String text = "Hello, World!";
+        int shift = 3;
+        boolean encrypt = true;
+
+        String encryptedText = caesarCipher(text, shift, encrypt);
+        System.out.println("Зашифрованный текст: " + encryptedText);
+
+        String decryptedText = caesarCipher(encryptedText, shift, false); // Decrypting
+        System.out.println("Расшифрованный текст: " + decryptedText);
+    }
+}
