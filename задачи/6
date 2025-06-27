@@ -1,0 +1,28 @@
+import java.util.*;
+
+public class MemoryCell {
+
+    public static List<Integer> processNumber(List<Integer> memory, int newNumber) {
+        if (memory.size() < 3) { // If there are empty cells
+            memory.add(newNumber); // Add the new number
+            Collections.sort(memory); // Keep the list sorted
+        } else { // If the memory is full
+            int minVal = Collections.min(memory); // Find the smallest value
+            if (newNumber > minVal) { // Only replace if newNumber is larger
+                memory.remove(Integer.valueOf(minVal)); // Remove the smallest value
+                memory.add(newNumber); // Add the new number
+                Collections.sort(memory); // Keep the list sorted
+            }
+        }
+        return memory;
+    }
+
+    public static void main(String[] args) {
+        List<Integer> memory = new ArrayList<>();
+        memory = processNumber(memory, 5);
+        memory = processNumber(memory, 2);
+        memory = processNumber(memory, 8);
+        memory = processNumber(memory, 3);
+        System.out.println("Memory Cell: " + memory); // Output the final state of the memory cell
+    }
+}
