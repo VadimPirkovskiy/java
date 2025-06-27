@@ -1,0 +1,15 @@
+public class Greeting {
+
+    public static void greet(String name) {
+        // Capitalize the first letter and lowercase the rest
+        String formattedName = name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase();
+
+        // Print the greeting
+        System.out.println("Привет, " + formattedName + "!");
+    }
+
+    public static void main(String[] args) {
+        // Example Usage (for testing)
+        greet("Света");  // You can change this input name
+    }
+}
