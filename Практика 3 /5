@@ -1,0 +1,77 @@
+import java.math.BigInteger;
+import java.util.HashMap;
+import java.util.Map;
+
+public class FibonacciDigitFrequencyBigInteger {
+
+    public static int[] findMostFrequentDigitInFibonacci(int n) {
+        if (n < 10 || n > 100000) {
+            return new int[]{-1, -1}; // Invalid input
+        }
+
+        // Calculate the nth Fibonacci number using BigInteger
+        String fibonacciNumber = calculateFibonacciBigInteger(n).toString();
+
+        // Calculate the frequency of each digit
+        Map<Integer, Integer> digitFrequencyMap = new HashMap<>();
+        for (char c : fibonacciNumber.toCharArray()) {
+            int digit = Character.getNumericValue(c);
+            digitFrequencyMap.put(digit, digitFrequencyMap.getOrDefault(digit, 0) + 1);
+        }
+
+        // Find the most frequent digit
+        int mostFrequentDigit = -1;
+        int maxFrequency = 0;
+
+        for (Map.Entry<Integer, Integer> entry : digitFrequencyMap.entrySet()) {
+            int digit = entry.getKey();
+            int frequency = entry.getValue();
+
+            if (frequency > maxFrequency) {
+                maxFrequency = frequency;
+                mostFrequentDigit = digit;
+            } else if (frequency == maxFrequency && digit > mostFrequentDigit) {
+                mostFrequentDigit = digit; // Choose the larger digit if frequencies are equal
+            }
+        }
+
+        return new int[]{maxFrequency, mostFrequentDigit};
+    }
+
+    // Efficiently calculate the nth Fibonacci number using memoization and BigInteger
+    private static BigInteger calculateFibonacciBigInteger(int n) {
+        BigInteger[] memo = new BigInteger[n + 1];
+        for (int i = 0; i <= n; i++) {
+            memo[i] = BigInteger.ZERO;
+        }
+        return calculateFibonacciHelperBigInteger(n, memo);
+    }
+
+    private static BigInteger calculateFibonacciHelperBigInteger(int n, BigInteger[] memo) {
+        if (n <= 1) {
+            return BigInteger.valueOf(n);
+        }
+        if (!memo[n].equals(BigInteger.ZERO)) {
+            return memo[n];
+        }
+        memo[n] = calculateFibonacciHelperBigInteger(n - 1, memo).add(calculateFibonacciHelperBigInteger(n - 2, memo));
+        return memo[n];
+    }
+
+    public static void main(String[] args) {
+        int n1 = 10;
+        int n2 = 15;
+        int n3 = 20;
+        int n4 = 10000;
+
+        int[] result1 = findMostFrequentDigitInFibonacci(n1);
+        int[] result2 = findMostFrequentDigitInFibonacci(n2);
+        int[] result3 = findMostFrequentDigitInFibonacci(n3);
+        int[] result4 = findMostFrequentDigitInFibonacci(n4);
+
+        System.out.println("f(" + n1 + "): " + result1[0] + " вхождений " + result1[1]);
+        System.out.println("f(" + n2 + "): " + result2[0] + " вхождений " + result2[1]);
+        System.out.println("f(" + n3 + "): " + result3[0] + " вхождений " + result3[1]);
+        System.out.println("f(" + n4 + "): " + result4[0] + " вхождений " + result4[1]);
+    }
+}
