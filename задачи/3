@@ -1,0 +1,15 @@
+public class RemoveVowels {
+
+    public static String removeVowels(String text) {
+        // Use regular expression to replace all vowels with an empty string
+        return text.replaceAll("[aeiouAEIOU]", "");
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        String inputString = "Hello World!";
+        String result = removeVowels(inputString);
+        System.out.println("Original string: " + inputString);
+        System.out.println("String without vowels: " + result);
+    }
+}
