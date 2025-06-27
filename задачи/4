@@ -1,0 +1,16 @@
+
+    public static void squaresOfSequence(int a, int b) {
+        int start = Math.min(a, b); // Determine the smaller number
+        int count = Math.max(a, b) - start + 1; // The count of items to be added. For example, if 5 is start and 1 is step we need to add 5 elements in our output
+
+        // Generate and print the squares of the arithmetic sequence
+        for (int i = 0; i < count; i++) {
+            System.out.print((int) Math.pow(start + i, 2) + " ");
+        }
+        System.out.println(); // Add a newline at the end
+    }
+
+    public static void main(String[] args) {
+        // Example Usage:
+        squaresOfSequence(5, 1); // Call the function with your input values
+    }
