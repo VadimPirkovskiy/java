@@ -1,0 +1,43 @@
+public class StickGame {
+
+    public static boolean canWin(long n) {
+        if (n <= 0) {
+            return false;
+        }
+
+        if (n == 1) {
+            return true;
+        }
+
+        if (n % 2 == 0) {
+            if (!canWin(n - 1)) {
+                return true;
+            }
+
+            if (!canWin(n / 2)) {
+                return true;
+            }
+
+            return false;
+        } else {
+            if (!canWin(n - 1)) {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        System.out.println("1: " + canWin(1));
+        System.out.println("2: " + canWin(2));
+        System.out.println("3: " + canWin(3));
+        System.out.println("4: " + canWin(4)); 
+        System.out.println("5: " + canWin(5));
+        System.out.println("6: " + canWin(6)); 
+        System.out.println("7: " + canWin(7));
+
+        System.out.println("10: " + canWin(10));
+        System.out.println("11: " + canWin(11));
+    }
+}
