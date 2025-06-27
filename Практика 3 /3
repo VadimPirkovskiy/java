@@ -1,0 +1,42 @@
+public class PowerSeriesProduct {
+
+    public static boolean isPossible(int number, int start) {
+        if (number <= 0) {
+            return false;
+        }
+
+        String numStr = String.valueOf(number);
+        int sumOfPowers = 0;
+
+        for (int i = 0; i < numStr.length(); i++) {
+            int digit = Character.getNumericValue(numStr.charAt(i));
+            sumOfPowers += Math.pow(digit, start + i);
+        }
+
+        // Check if sumOfPowers is divisible by number and the quotient is a power of 2
+        if (sumOfPowers % number == 0) {
+            int quotient = sumOfPowers / number;
+            return isPowerOfTwo(quotient);
+        }
+
+        return false;
+    }
+
+    private static boolean isPowerOfTwo(int n) {
+        if (n <= 0) {
+            return false;
+        }
+        while (n % 2 == 0) {
+            n /= 2;
+        }
+        return n == 1;
+    }
+
+    public static void main(String[] args) {
+        System.out.println("SC(89, 1): " + isPossible(89, 1)); // true (8^1 + 9^2 = 89, 89 / 89 = 1, 1 = 2^0)
+        System.out.println("SC(695, 2): " + isPossible(695, 2)); // true (6^2 + 9^3 + 5^4 = 1390, 1390 / 695 = 2, 2 = 2^1)
+        System.out.println("SC(10, 1): " + isPossible(10, 1));  // false (1^1 + 0^2 = 1, 1 / 10 = 0.1 not an integer)
+        System.out.println("SC(123, 1): " + isPossible(123, 1));  //false
+        System.out.println("SC(123,2): " + isPossible(123, 2)); //false
+    }
+}
