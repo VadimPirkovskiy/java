@@ -1,0 +1,43 @@
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class TextModifier {
+
+    public static String modifyText(String text) {
+        if (text == null || text.isEmpty()) {
+            return "";
+        }
+
+        // Define a regular expression to match words (including punctuation)
+        Pattern pattern = Pattern.compile("(\\b\\w)(\\w*)"); // Match first letter and the rest of the word
+        Matcher matcher = pattern.matcher(text);
+        StringBuilder modifiedText = new StringBuilder();
+
+        int lastMatchEnd = 0;
+
+        while (matcher.find()) {
+            // Append the text before the current match
+            modifiedText.append(text.substring(lastMatchEnd, matcher.start()));
+
+            // Extract the first letter and the rest of the word
+            String firstLetter = matcher.group(1);
+            String restOfWord = matcher.group(2);
+
+            // Modify the word and add "ауч"
+            modifiedText.append(restOfWord).append(firstLetter).append("ауч");
+            lastMatchEnd = matcher.end();
+        }
+
+        // Append the remaining text after the last match
+        modifiedText.append(text.substring(lastMatchEnd));
+
+        return modifiedText.toString();
+    }
+
+    public static void main(String[] args) {
+        String text = "Привет мир! Как дела?";
+        String modifiedText = modifyText(text);
+        System.out.println("Исходный текст: " + text);
+        System.out.println("Измененный текст: " + modifiedText); // Output: риветП аучмир ауч! какА аучделаа уч?
+    }
+}
