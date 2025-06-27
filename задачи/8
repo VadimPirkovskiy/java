@@ -1,0 +1,33 @@
+public class CaseConverter {
+
+    public static String convertCase(String str) {
+        int upperCount = 0;
+        int lowerCount = 0;
+
+        // Count uppercase and lowercase characters
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (Character.isUpperCase(c)) {
+                upperCount++;
+            } else if (Character.isLowerCase(c)) {
+                lowerCount++;
+            }
+        }
+
+        // Convert based on the counts
+        if (upperCount > lowerCount) {
+            return str.toUpperCase();
+        } else if (lowerCount > upperCount) {
+            return str.toLowerCase();
+        } else {
+            return str.toLowerCase();
+        }
+    }
+
+    public static void main(String[] args) {
+        // Example Usage:
+        System.out.println(convertCase("ABccAAr")); // Output: ABCCAAR
+        System.out.println(convertCase("abCCaaR")); // Output: abccaar
+        System.out.println(convertCase("AbCcAAr")); // Output: abccaar
+    }
+}
